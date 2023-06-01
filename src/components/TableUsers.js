@@ -12,7 +12,8 @@ function TableUsers() {
 
     const getUser = async () => {
         const res = await fetchAllUser();
-        if (res && res.data && res.data.data) setListUsers(res.data.data);
+        console.log(res);
+        if (res && res.data) setListUsers(res.data);
     };
 
     return (
