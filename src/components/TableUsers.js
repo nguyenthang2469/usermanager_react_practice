@@ -1,43 +1,43 @@
+import { useEffect, useState } from 'react';
+import Table from 'react-bootstrap/Table';
+import { fetchAllUser } from '../services/UserService';
 
 function TableUsers() {
+    const [listUsers, setListUsers] = useState([]);
+
+    useEffect(() => {
+        getUser();
+
+    }, []);
+
+    const getUser = async () => {
+        const res = await fetchAllUser();
+        if (res && res.data && res.data.data) setListUsers(res.data.data);
+    };
+
     return (
         <div>
-            <table className="table-auto">
+            <Table striped bordered hover>
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Name</th>
+                        <th>ID</th>
                         <th>Email</th>
-                        <th>Password</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr className='odd:bg-gray-200'>
-                        <td>ID</td>
-                        <td>Name</td>
-                        <td>Email</td>
-                        <td>Password</td>
-                    </tr>
-                    <tr className='odd:bg-gray-200'>
-                        <td>ID</td>
-                        <td>Name</td>
-                        <td>Email</td>
-                        <td>Password</td>
-                    </tr>
-                    <tr className='odd:bg-gray-200'>
-                        <td>ID</td>
-                        <td>Name</td>
-                        <td>Email</td>
-                        <td>Password</td>
-                    </tr>
-                    <tr className='odd:bg-gray-200'>
-                        <td>ID</td>
-                        <td>Name</td>
-                        <td>Email</td>
-                        <td>Password</td>
-                    </tr>
+                    {listUsers && listUsers.length > 0 &&
+                        listUsers.map((user, index) => (
+                            <tr key={`users-${index}`}>
+                                <td>{user.id}</td>
+                                <td>{user.email}</td>
+                                <td>{user.first_name}</td>
+                                <td>@{user.last_name}</td>
+                            </tr>
+                        ))}
                 </tbody>
-            </table>
+            </Table>
         </div>
     );
 }
