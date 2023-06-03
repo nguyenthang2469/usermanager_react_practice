@@ -23,11 +23,16 @@ function ModalAddNew(props) {
         }
     };
     return (
-        <Modal show={show} onHide={() => {
-            setName('');
-            setJob('');
-            handleClose();
-        }}>
+        <Modal
+            show={show}
+            onHide={() => {
+                setName('');
+                setJob('');
+                handleClose();
+            }}
+            backdrop="static"
+            keyboard={false}
+        >
             <Modal.Header closeButton>
                 <Modal.Title>Add new user</Modal.Title>
             </Modal.Header>

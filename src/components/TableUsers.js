@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { fetchAllUser } from '../services/UserService';
 import ModalAddNew from './ModalAddNew';
 import ModalEditUser from './ModalEditUser';
+import ModalConfirm from './ModalConfirm';
 
 function TableUsers() {
     const [listUsers, setListUsers] = useState([]);
@@ -14,11 +15,14 @@ function TableUsers() {
     const [totalPages, setTotalPages] = useState(0);
     const [isShowModalAddNew, setIsShowModalAddNew] = useState(false);
     const [isShowModalEditUser, setIsShowModalEditUser] = useState(false);
+    const [isShowModalDelete, setIsShowModalDelete] = useState(false);
     const [dataUserEdit, setDataUserEdit] = useState({});
+    const [dataUserDelete, setDataUserDelete] = useState({});
 
     const handleClose = () => {
         setIsShowModalAddNew(false);
         setIsShowModalEditUser(false);
+        setIsShowModalDelete(false);
     };
 
     const handleUpdateTable = (user) => {
@@ -55,6 +59,15 @@ function TableUsers() {
         setDataUserEdit(user);
     };
 
+    const handleDeleteUser = (user) => {
+        setIsShowModalDelete(true);
+        setDataUserDelete(user);
+    };
+
+    const handleDeleteUserFromModal = (user) => {
+        setListUsers(prev => prev.filter(item => item.id !== user.id));
+    };
+
     return (
         <>
             <div className="my-3 d-flex justify-content-between align-items-center">
@@ -84,7 +97,10 @@ function TableUsers() {
                                         className='btn btn-warning mx-3'
                                         onClick={() => handleEditUser(user)}
                                     >Edit</button>
-                                    <button className='btn btn-danger'>Delete</button>
+                                    <button
+                                        className='btn btn-danger'
+                                        onClick={() => handleDeleteUser(user)}
+                                    >Delete</button>
                                 </td>
                             </tr>
                         ))}
@@ -119,6 +135,12 @@ function TableUsers() {
                 handleClose={handleClose}
                 handleEditUserFromModal={handleEditUserFromModal}
                 dataUserEdit={dataUserEdit}
+            />
+            <ModalConfirm
+                show={isShowModalDelete}
+                handleClose={handleClose}
+                handleDeleteUserFromModal={handleDeleteUserFromModal}
+                dataUserDelete={dataUserDelete}
             />
         </>
     );

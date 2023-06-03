@@ -34,12 +34,17 @@ function ModalEditUser(props) {
     }, [dataUserEdit]);
 
     return (
-        <Modal show={show} onHide={() => {
-            setJob('');
-            handleClose();
-        }}>
+        <Modal
+            show={show}
+            onHide={() => {
+                setJob('');
+                handleClose();
+            }}
+            backdrop="static"
+            keyboard={false}
+        >
             <Modal.Header closeButton>
-                <Modal.Title>Edit an user</Modal.Title>
+                <Modal.Title>Edit a user</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div>
