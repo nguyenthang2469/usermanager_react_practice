@@ -1,12 +1,28 @@
 import { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import ReactPaginate from 'react-paginate';
+import Button from 'react-bootstrap/Button';
 import { fetchAllUser } from '../services/UserService';
+import ModalAddNew from './ModalAddNew';
+import ModalEditUser from './ModalEditUser';
 
 function TableUsers() {
     const [listUsers, setListUsers] = useState([]);
+    // eslint-disable-next-line no-unused-vars
     const [totalUsers, setTotalUsers] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
+    const [isShowModalAddNew, setIsShowModalAddNew] = useState(false);
+    const [isShowModalEditUser, setIsShowModalEditUser] = useState(false);
+    const [dataUserEdit, setDataUserEdit] = useState({});
+
+    const handleClose = () => {
+        setIsShowModalAddNew(false);
+        setIsShowModalEditUser(false);
+    };
+
+    const handleUpdateTable = (user) => {
+        setListUsers([user, ...listUsers]);
+    };
 
     useEffect(() => {
         getUsers(1);
@@ -26,8 +42,17 @@ function TableUsers() {
         getUsers(+event.selected + 1);
     };
 
+    const handleEditUser = (user) => {
+        setIsShowModalEditUser(true);
+        setDataUserEdit(user);
+    };
+
     return (
-        <div>
+        <>
+            <div className="my-3 d-flex justify-content-between align-items-center">
+                <span><b>List Users:</b></span>
+                <Button variant='success' onClick={() => setIsShowModalAddNew(true)}>Add new user</Button>
+            </div>
             <Table striped bordered hover>
                 <thead>
                     <tr>
@@ -35,6 +60,7 @@ function TableUsers() {
                         <th>Email</th>
                         <th>First Name</th>
                         <th>Last Name</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,6 +71,13 @@ function TableUsers() {
                                 <td>{user.email}</td>
                                 <td>{user.first_name}</td>
                                 <td>@{user.last_name}</td>
+                                <td>
+                                    <button
+                                        className='btn btn-warning mx-3'
+                                        onClick={() => handleEditUser(user)}
+                                    >Edit</button>
+                                    <button className='btn btn-danger'>Delete</button>
+                                </td>
                             </tr>
                         ))}
                 </tbody>
@@ -68,7 +101,18 @@ function TableUsers() {
                 activeClassName="active"
                 renderOnZeroPageCount={null}
             />
-        </div>
+            <ModalAddNew
+                show={isShowModalAddNew}
+                handleClose={handleClose}
+                handleUpdateTable={handleUpdateTable}
+            />
+            <ModalEditUser
+                show={isShowModalEditUser}
+                handleClose={handleClose}
+                handleUpdateTable={handleUpdateTable}
+                dataUserEdit={dataUserEdit}
+            />
+        </>
     );
 }
 
