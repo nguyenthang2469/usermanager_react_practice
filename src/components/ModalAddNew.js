@@ -46,7 +46,7 @@ function ModalAddNew(props) {
                         <div className="mb-3">
                             <label className="form-label">Job</label>
                             <input
-                                type="password"
+                                type="text"
                                 className="form-control"
                                 value={job}
                                 onChange={e => setJob(e.target.value)}

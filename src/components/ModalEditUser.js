@@ -1,18 +1,28 @@
 import { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { postCreateUser } from '../services/UserService';
+import { putUpdateUser } from '../services/UserService';
 import { useEffect } from 'react';
 
 
 function ModalEditUser(props) {
     // eslint-disable-next-line react/prop-types
-    const { handleClose, show, dataUserEdit } = props;
+    const { handleClose, handleEditUserFromModal, show, dataUserEdit } = props;
     const [name, setName] = useState('');
     const [job, setJob] = useState('');
 
-    const handleEditUser = () => {
-
+    const handleEditUser = async () => {
+        // eslint-disable-next-line react/prop-types
+        const res = await putUpdateUser(dataUserEdit.id, { name, job });
+        if (res && res.updatedAt) {
+            handleEditUserFromModal({
+                first_name: name,
+                // eslint-disable-next-line react/prop-types
+                id: dataUserEdit.id
+            });
+            handleClose();
+            toast.success("Update user succeed!");
+        }
     };
 
     useEffect(() => {
@@ -46,7 +56,7 @@ function ModalEditUser(props) {
                         <div className="mb-3">
                             <label className="form-label">Job</label>
                             <input
-                                type="password"
+                                type="text"
                                 className="form-control"
                                 value={job}
                                 onChange={e => setJob(e.target.value)}
